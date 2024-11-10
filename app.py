@@ -66,14 +66,12 @@ df_slide_cleaned = remove_outliers(df_slide, features)
 scaler = MinMaxScaler()
 df_normalized = pd.DataFrame(scaler.fit_transform(df_slide_cleaned), columns=df_slide_cleaned.columns, index=df_slide_cleaned.index)
 
-# Membagi data menjadi train dan test
+# Melatih model dengan seluruh data
 X_train_model = df_normalized.drop(columns=['xt'])
 y_train_model = df_normalized['xt']
-X_train, X_test, y_train, y_test = train_test_split(X_train_model, y_train_model, test_size=0.2, random_state=42, shuffle=False)
 
-# Training model Bagging
 bagging_model = BaggingRegressor(estimator=LinearRegression(), n_estimators=10, random_state=42)
-bagging_model.fit(X_train, y_train)
+bagging_model.fit(X_train_model, y_train_model)
 
 # Menambahkan input untuk jumlah bulan yang akan diprediksi
 st.subheader("Prediksi Jumlah Pengunjung di Masa Depan")
